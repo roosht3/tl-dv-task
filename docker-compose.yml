@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+    app:
+      build:
+        context: .
+        dockerfile: docker/node/Dockerfile
+      depends_on:
+          - mongo
+      networks:
+          - vpc 
+      volumes:
+      - ./app:/home/node/app
+
+    nginx:
+      build:
+        context: .
+        dockerfile: docker/nginx/Dockerfile
+      ports:
+        - '80:80'
+        - '8080:8080'
+      depends_on:
+        - app
+      networks:
+        - vpc 
+      environment:
+        - NODE_PORT=${TLDV_NODE_PORT:?err}
+
+    mongo:
+      image: "mongo:5.0"
+      networks:
+        - vpc
+      volumes:
+        - mongo-tldv:/data/db
+        - ./docker/mongo/init.sh:/docker-entrypoint-initdb.d/mongo-init.sh:ro
+      ports:
+        - "27017:27017"
+      environment:
+        - MONGO_INITDB_ROOT_USERNAME=root
+        - MONGO_INITDB_ROOT_PASSWORD=very_secret
+        - MONGO_INITDB_DATABASE=${TLDV_MONGODB_DB_NAME:?err}
+        - TLDV_MONGODB_DB_NAME=${TLDV_MONGODB_DB_NAME:?err}
+        - TLDV_MONGODB_USER_NAME=${TLDV_MONGODB_USER_NAME:?err}
+        - TLDV_MONGODB_USER_PASS=${TLDV_MONGODB_USER_PASS:?err}
+
+networks:
+  vpc:
+    driver: bridge
+
+volumes:
+    mongo-tldv:
