@@ -13,8 +13,6 @@ const db = {
 const Db = async () => {
   try {
     const mongoURI: string = `mongodb://${db.username}:${db.password}@${db.host}:${db.port}/${db.name}`;
-    console.log(mongoURI)
-    //const mongoURI: string = `mongodb+srv://rooshan:Dj1994@cluster0.pi2ig.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
     await connect(mongoURI);
     console.log("MongoDB Connected...");
   } catch (err: any) {
