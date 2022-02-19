@@ -10,8 +10,9 @@
 3. add `tldv.localhost` to your host file
 4. Run `docker compose up` (Make sure to run from the root directory)
 5. Seeding video collection
-   1. `docker compose exec app sh`
-   2. Wait till the `Seeded` message is visible
+   1. `docker compose exec app sh` CLI and login to app container
+   2. Seed the data using `npm run seed`
+   3. Wait till the `Seeded` message is visible
 6. Voila! Grab yourself a coffee!
 
    
